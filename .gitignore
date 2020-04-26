@@ -35,6 +35,7 @@ solution*
 *.app
 demo
 test
+main.*
 
 # Project exclude paths
 /cmake-build-debug/
