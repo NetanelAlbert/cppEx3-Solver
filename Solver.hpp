@@ -9,48 +9,52 @@
 #include <complex>
 using namespace std;
 namespace solver{
-    class RealVariable{
-        double _xx;
-        double _x;
-        double _n;
-        void restart();
-        RealVariable (double a, double b, double c):_xx(a), _x(b), _n(c){};
-    public:
-        RealVariable ():_xx(0), _x(1), _n(0){};
-        RealVariable operator+(const RealVariable&) const;
-        RealVariable operator+(const double&) const;
-        RealVariable operator-(const RealVariable&) const;
-        RealVariable operator-(const double&) const;
-        friend RealVariable operator+(const double&,const RealVariable&);
-        friend RealVariable operator-(const double&,const RealVariable&);
-        // friend RealVariable& operator-(RealVariable&); TODO -x
 
-        RealVariable operator*(const RealVariable&) const;
-        RealVariable operator*(const double&) const;
-        RealVariable operator/(const RealVariable&) const; // TODO
-        RealVariable operator/(const double&) const;
-        friend RealVariable operator*(const double&, const RealVariable&);
-        friend RealVariable operator/(const double&, const RealVariable&);
+    class ComplexVariable{
+        complex<double> _xx;
+        complex<double> _x;
+        complex<double> _n;
+        //void restart();
+        ComplexVariable (complex<double> a, complex<double> b, complex<double> c):_xx(a), _x(b), _n(c){};
+    public:
+        ComplexVariable ():_xx(0), _x(1), _n(0){};
+        ComplexVariable operator+(const ComplexVariable&) const;
+        ComplexVariable operator+(const complex<double>&) const;
+        ComplexVariable operator-(const ComplexVariable&) const;
+        ComplexVariable operator-(const complex<double>&) const;
+        friend ComplexVariable operator+(const complex<double>&,const ComplexVariable&);
+        friend ComplexVariable operator-(const complex<double>&,const ComplexVariable&);
+
+        ComplexVariable operator*(const ComplexVariable&) const;
+        ComplexVariable operator*(const complex<double>&) const;
+        ComplexVariable operator/(const ComplexVariable&) const; // TODO
+        ComplexVariable operator/(const complex<double>&) const;
+        friend ComplexVariable operator*(const complex<double>&, const ComplexVariable&);
+        friend ComplexVariable operator/(const complex<double>&, const ComplexVariable&);
         // TODO make sure that can't get 1/x, 1/x^2
 
-        RealVariable operator^(const int&) const;
-        RealVariable operator==(const RealVariable&) const;
-        RealVariable operator==(const double &) const;
-        friend RealVariable operator==(const double&, const RealVariable&);
+        ComplexVariable operator^(const int&) const;
+        ComplexVariable operator==(const ComplexVariable&) const;
+        ComplexVariable operator==(const complex<double> &) const;
+        friend ComplexVariable operator==(const complex<double>&, const ComplexVariable&);
 
-        RealVariable operator -() const;
-        double solveMe() const;
-        friend ostream& operator << (ostream& s, const RealVariable &var);
+        ComplexVariable operator -() const;
+        complex<double> solveMe() const;
+        friend ostream& operator << (ostream& s, const ComplexVariable &var);
     };
-    class ComplexVariable{
+
+    class RealVariable: public ComplexVariable{
 
     };
-//    class solve{
-//        friend double operator ()(const RealVariable& var){
-//            return var.solveMe();
-//        };
-//    };
+
     inline double solve(const RealVariable& var){
+        complex<double>  ans = var.solveMe();
+        if(ans.imag() != 0)
+            throw runtime_error("the equation has no real solution");
+
+        return ans.real();
+    };
+    inline complex<double> solve(const ComplexVariable& var){
         return var.solveMe();
     };
 
