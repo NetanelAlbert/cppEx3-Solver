@@ -3,7 +3,7 @@
 //
 
 
-#include "Solver.hpp"
+#include "solver.hpp"
 #define TEMPL_TYPE template <typename coe_type, typename class_type>
 using namespace solver;
 TEMPL_TYPE

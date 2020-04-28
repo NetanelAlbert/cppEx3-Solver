@@ -5,7 +5,7 @@
 #include <iostream>
 #include <random>
 #include "doctest.h"
-#include "Solver.hpp"
+#include "solver.hpp"
 
 #define EPS 0.0001
 
