@@ -3,4 +3,4 @@ project(cppEx3_Solver)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(cppEx3_Solver Demo.cpp Solver.cpp)
+add_executable(cppEx3_Solver Demo.cpp Solver.cpp Test.cpp)

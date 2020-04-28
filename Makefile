@@ -16,9 +16,6 @@ run: demo
 demo: Demo.o $(STUDENT_OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o demo
 
-main: main.o $(STUDENT_OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o main
-
 test: TestCounter.o Test.o $(STUDENT_OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o test
 

@@ -1,5 +1,5 @@
 //
-// Created by nati on 25/04/2020.
+// Created by Netanel Albert on 25/04/2020.
 //
 
 #ifndef SOLVER_A_SOLVER_H
@@ -9,16 +9,22 @@
 #include <complex>
 using namespace std;
 namespace solver{
-    template <typename coefficient_type, typename class_type>
+    /**
+     * This template class represents a quadratic expression of the form 'a*x^2 + b*x +c'
+     * The default initialise creat just '1*x'
+     *
+     * @tparam coefficient_type - in my implementation - double or complex<double>
+     * @tparam class_type - the derived class.
+     */
+    template <typename coefficient_type, class class_type>
     class Variable{
-
-        coefficient_type _xx;
-        coefficient_type _x;
-        coefficient_type _n;
+        coefficient_type _a;
+        coefficient_type _b;
+        coefficient_type _c;
     protected:
-        Variable (coefficient_type a, coefficient_type b, coefficient_type c):_xx(a), _x(b), _n(c){};
+        Variable (coefficient_type a, coefficient_type b, coefficient_type c): _a(a), _b(b), _c(c){};
     public:
-        Variable ():_xx(0), _x(1), _n(0){};
+        Variable (): _a(0), _b(1), _c(0){};
         class_type operator+(const class_type&) const;
         class_type operator+(const coefficient_type&) const;
         class_type operator-(const class_type&) const;
@@ -32,20 +38,17 @@ namespace solver{
 
         class_type operator*(const class_type&) const;
         class_type operator*(const coefficient_type&) const;
-        class_type operator/(const class_type&) const; // TODO
+        class_type operator/(const class_type&) const;
         class_type operator/(const coefficient_type&) const;
         friend class_type operator*(const coefficient_type& n,const class_type& other){
             return other * n;
         }
         friend class_type operator/(const coefficient_type& n, const class_type& other){
-            // TODO return class_type<coe_type>(n)/other.; (cant return local class_type, cant divide certain cases.
-            //throw  runtime_error("not yet implemented");
-            if (other._xx == 0.0 && other._x == 0.0){
-                return class_type(0, 0, n/other._n);
+            if (other._a == 0.0 && other._b == 0.0){
+                return class_type(0, 0, n/other._c);
             }
-            throw runtime_error("Cant divide by class_type");
+            throw runtime_error("Cant divide by variable");
         }
-    // TODO make sure that can't get 1/x, 1/x^2
 
 
         class_type operator^(const int&) const;
@@ -56,42 +59,32 @@ namespace solver{
         }
 
         class_type operator -() const;
-        complex<double> solveMe() const;
+        complex<double> compareToZero() const;
     };
 
     class ComplexVariable: public Variable<complex<double>, ComplexVariable>{
     public:
         ComplexVariable() : Variable<complex<double>, ComplexVariable>() {};
         ComplexVariable (complex<double> a, complex<double> b, complex<double> c): Variable<complex<double>, ComplexVariable>(a,b,c) {};
-//        ComplexVariable& operator=(const Variable<complex<double>, ComplexVariable> var){
-//            //_xx = var._xx;
-//            return *this;
-//        }
     };
 
     class RealVariable: public Variable<double, RealVariable>{
     public:
         RealVariable (): Variable<double, RealVariable>() {};
         RealVariable (double a, double b, double c): Variable<double, RealVariable>(a,b,c) {};
-//        RealVariable& operator=(const Variable<double, RealVariable> var){
-//            //_xx = var._xx;
-//            return *this;
-//        }
     };
 
     inline double solve(const RealVariable& var){
-        complex<double>  ans = var.solveMe();
+        complex<double>  ans = var.compareToZero();
         if(ans.imag() != 0)
             throw runtime_error("the equation has no real solution");
 
         return ans.real();
     };
     inline complex<double> solve(const ComplexVariable& var){
-        return var.solveMe();
+        return var.compareToZero();
     };
 
 }
 
 #endif //SOLVER_A_SOLVER_H
-
-//#include "SolverCode.hpp"
